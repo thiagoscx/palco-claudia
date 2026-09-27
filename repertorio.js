@@ -9,7 +9,7 @@ const ESPETACULO = {
     { n: 2, tema: "Amor",     cor: "#FF5D8F", faixas: [
       { id: "2-1", dur: 174, num: "2.1", titulo: "Como É Grande o Meu Amor por Você", artista: "Rádio Bita" },
       { id: "2-2c", dur: 114, corte: [0, 48], num: "2.2", titulo: "Oração", artista: "instrumental", nota: "até 0:48, aí emenda no remix" },
-      { id: "2-2f", dur: 206, num: "2.2", titulo: "Oração", artista: "JetLag Music & Léo Fressato", nota: "remix, entra depois da instrumental" },
+      { id: "2-2f", dur: 206, corte: [140, null], num: "2.2", titulo: "Oração", artista: "JetLag Music & Léo Fressato", nota: "remix, começa em 2:20 logo depois da instrumental" },
       { id: "2-3", dur: 161, num: "2.3", titulo: "Sunflower", artista: "Post Malone & Swae Lee", nota: "cantada" } ] },
     { n: 3, tema: "Coragem",  cor: "#FF6B35", faixas: [
       { id: "3-1a", dur: 203, num: "3.1", titulo: "What's Up Danger", artista: "instrumental" },
