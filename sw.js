@@ -1,6 +1,6 @@
 // Offline: o app fica no cache "app-vN"; as músicas num cache separado ("musicas-v1")
 // que NÃO é apagado quando eu atualizo o app, pra ela não rebaixar 52 MB.
-const APP = "app-v9";
+const APP = "app-v10";
 const SHELL = ["./", "index.html", "repertorio.js", "manifest.json", "icone.png"];
 self.addEventListener("install", e => { self.skipWaiting(); e.waitUntil(caches.open(APP).then(c => c.addAll(SHELL)).catch(() => {})); });
 self.addEventListener("activate", e => { e.waitUntil((async () => {
@@ -23,7 +23,9 @@ self.addEventListener("fetch", e => {
     // É o que faz qualquer correção minha chegar nela sem precisar reinstalar nada.
     try {
       // cache: "no-cache" = confere no servidor mesmo dentro dos 10 min que o GitHub manda guardar (só custa um 304)
-      const r = await Promise.race([fetch(e.request, { cache: "no-cache" }), new Promise((_, x) => setTimeout(() => x(new Error("lento")), 3500))]);
+      // busca com carimbo de hora na URL: fura o cache da rede do GitHub (que pode entregar cópia velha por 10 min)
+      const alvo = new URL(e.request.url); alvo.searchParams.set("sw", Date.now());
+      const r = await Promise.race([fetch(alvo.href, { cache: "no-cache" }), new Promise((_, x) => setTimeout(() => x(new Error("lento")), 3500))]);
       if (r.ok) (await caches.open(APP)).put(e.request, r.clone());
       return r;
     } catch {
