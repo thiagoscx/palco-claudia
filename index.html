@@ -295,6 +295,8 @@ if ("mediaSession" in navigator) { navigator.mediaSession.setActionHandler("play
   navigator.mediaSession.setActionHandler("nexttrack", proxima); }
 document.addEventListener("visibilitychange", async () => { if (!document.hidden && !au.paused) { try { wake = wake || await navigator.wakeLock?.request("screen"); } catch {} } });
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(() => {});
+// pede pro Android não apagar as músicas quando a memória do celular apertar
+navigator.storage?.persist?.().catch(() => {});
 renderLista(); renderBaixar();
 </script>
 </body></html>
