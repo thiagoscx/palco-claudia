@@ -12,7 +12,7 @@ const ESPETACULO = {
       { id: "2-1c", dur: 167, num: "2.1", titulo: "Como É Grande o Meu Amor por Você", artista: "Melim", nota: "opção: leve e alegre, jovem" },
       { id: "2-1d", dur: 143, num: "2.1", titulo: "Como É Grande o Meu Amor por Você", artista: "Mariana Nolasco", nota: "opção: voz e violão, de ninar" },
       { id: "2-2c", v: 2, dur: 114, num: "2.2", titulo: "Oração", artista: "instrumental + remix JetLag", nota: "emendada: instrumental até 0:47 e o remix entra na batida" },
-      { id: "2-2g", dur: 112, num: "2.2", titulo: "Oração", artista: "instrumental + remix JetLag", nota: "opção: emenda em 0:46" },
+      { id: "2-2g", v: 2, dur: 186, num: "2.2", titulo: "Oração", artista: "instrumental + remix JetLag", nota: "opção: emenda em 0:46, remix inteiro, 3 min" },
       { id: "2-3", dur: 161, num: "2.3", titulo: "Sunflower", artista: "Post Malone & Swae Lee", nota: "cantada" } ] },
     { n: 3, tema: "Coragem",  cor: "#FF6B35", faixas: [
       { id: "3-1a", dur: 203, num: "3.1", titulo: "What's Up Danger", artista: "instrumental" },
