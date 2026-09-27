@@ -5,6 +5,11 @@ const ESPETACULO = {
   coreografias: [
     { n: 1, tema: "Alegria",  cor: "#FFB627", faixas: [
       { id: "1-1", dur: 185, num: "1.1", titulo: "Bagunça de Criança", artista: "Mundo Bita", nota: "entrada" },
+      { id: "1-1b", dur: 232, num: "1.1", titulo: "Happy", artista: "Pharrell Williams", nota: "opção" },
+      { id: "1-1c", dur: 165, num: "1.1", titulo: "Alegria, Alegria", artista: "Caetano Veloso", nota: "opção" },
+      { id: "1-1d", dur: 244, num: "1.1", titulo: "O Sol", artista: "Jota Quest", nota: "opção" },
+      { id: "1-1e", dur: 245, num: "1.1", titulo: "Velha Infância", artista: "Tribalistas", nota: "opção" },
+      { id: "1-1f", dur: 188, num: "1.1", titulo: "Chuva de Prata", artista: "Gal Costa", nota: "opção" },
       { id: "1-2", dur: 222, num: "1.2", titulo: "Tempo de Alegria", artista: "Ivete Sangalo" } ] },
     { n: 2, tema: "Amor",     cor: "#FF5D8F", faixas: [
       { id: "2-1", dur: 174, num: "2.1", titulo: "Como É Grande o Meu Amor por Você", artista: "Rádio Bita" },
