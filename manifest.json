@@ -1,0 +1,15 @@
+{
+  "name": "Palco · Formatura Montessori",
+  "short_name": "Palco",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#14101A",
+  "theme_color": "#14101A",
+  "lang": "pt-BR",
+  "icons": [
+    { "src": "icone.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icone-mascara.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

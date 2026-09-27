@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="pt-BR"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#14101A">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icone.png">
+<title>Palco</title>
+<style>
+:root{--bg:#14101A;--surface:#221B2E;--surface2:#2C2440;--ink:#F6F2FA;--muted:#A79BBD;--line:#3A3050;--cor:#FF6B35}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
+html,body{height:100%;margin:0;overscroll-behavior:none}
+body{background:var(--bg);color:var(--ink);font:16px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+.tela{display:none;height:100%;flex-direction:column}.tela.on{display:flex}
+
+/* ---------- lista ---------- */
+#lista{overflow-y:auto;-webkit-overflow-scrolling:touch}
+.topo{padding:18px 16px 12px;position:sticky;top:0;background:var(--bg);z-index:3}
+.topo h1{font-size:26px;font-weight:800;margin:0;letter-spacing:-.02em}
+.topo .sub{color:var(--muted);font-size:13px;margin-top:2px}
+.modos{display:flex;gap:8px;margin-top:14px;background:var(--surface);padding:4px;border-radius:12px}
+.modos button{flex:1;padding:11px;border-radius:9px;font-weight:600;font-size:15px;color:var(--muted)}
+.modos button.on{background:var(--surface2);color:var(--ink)}
+.baixar{margin:0 16px 12px;padding:14px;background:var(--surface);border-radius:14px;border-left:4px solid var(--cor)}
+.baixar b{display:block;margin-bottom:4px}.baixar p{margin:0;color:var(--muted);font-size:13px}
+.baixar button{margin-top:12px;width:100%;padding:14px;background:var(--cor);color:#14101A;border-radius:11px;font-weight:800}
+.baixar .barra{height:8px;background:var(--surface2);border-radius:4px;overflow:hidden;margin-top:12px}
+.baixar .barra i{display:block;height:100%;background:var(--cor);width:0;transition:width .2s}
+.coreo{margin:0 0 6px}
+.coreo .cab{display:flex;align-items:center;gap:12px;padding:16px 16px 8px}
+.coreo .bolinha{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:16px;color:#14101A;flex:none}
+.coreo .nome{font-size:19px;font-weight:800;letter-spacing:.01em;text-transform:uppercase}
+.coreo .meta{margin-left:auto;color:var(--muted);font-size:13px;font-variant-numeric:tabular-nums}
+.faixa{display:flex;align-items:center;gap:12px;padding:13px 16px;margin:0 10px 4px;border-radius:12px;background:var(--surface)}
+.faixa:active{background:var(--surface2)}
+.faixa .n{font-size:12px;color:var(--muted);font-weight:700;min-width:26px;font-variant-numeric:tabular-nums}
+.faixa .t{flex:1;min-width:0}
+.faixa .t b{display:block;font-weight:600;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.faixa .t span{color:var(--muted);font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
+.faixa .dur{color:var(--muted);font-size:13px;font-variant-numeric:tabular-nums}
+.faixa.tocando{outline:2px solid var(--cor)}
+.faixa .nota{color:var(--cor);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.rodape{padding:24px 16px 40px;color:var(--muted);font-size:12px;text-align:center}
+
+/* ---------- player ---------- */
+#player{background:var(--bg)}
+.phead{display:flex;align-items:center;gap:12px;padding:12px 14px}
+.phead .voltar{padding:8px 12px 8px 4px;font-size:26px;line-height:1}
+.phead .tema{font-weight:800;text-transform:uppercase;letter-spacing:.06em;font-size:14px;color:var(--cor)}
+.phead .cont{margin-left:auto;color:var(--muted);font-size:13px}
+.pcorpo{flex:1;overflow-y:auto;padding:0 16px 24px;display:flex;flex-direction:column}
+.tit{margin:6px 0 2px}
+.tit .num{color:var(--muted);font-weight:700;font-size:13px}
+.tit h2{margin:2px 0 0;font-size:27px;line-height:1.1;font-weight:800;letter-spacing:-.02em}
+.tit p{margin:3px 0 0;color:var(--muted);font-size:14px}
+.prog{margin:16px 0 4px;height:44px;position:relative;display:flex;align-items:center}
+.prog .trilho{height:10px;width:100%;background:var(--surface2);border-radius:5px;position:relative;overflow:hidden}
+.prog .corte{position:absolute;top:0;bottom:0;background:#14101A;opacity:.72}
+.prog .feito{position:absolute;top:0;bottom:0;left:0;background:var(--cor);border-radius:5px}
+.prog .ab{position:absolute;top:0;bottom:0;background:rgba(255,255,255,.25)}
+.prog .pt{position:absolute;top:-5px;width:3px;height:20px;background:var(--ink);border-radius:2px;opacity:.85}
+.tempos{display:flex;justify-content:space-between;color:var(--muted);font-size:13px;font-variant-numeric:tabular-nums}
+.tempos b{color:var(--ink);font-weight:600}
+.transporte{display:flex;align-items:center;justify-content:center;gap:18px;margin:14px 0 6px}
+.transporte .sec{width:62px;height:62px;border-radius:50%;background:var(--surface);display:grid;place-items:center;font-size:12px;font-weight:700;color:var(--muted);line-height:1.1;text-align:center}
+.transporte .sec:active{background:var(--surface2)}
+#btnPlay{width:132px;height:132px;border-radius:50%;background:var(--cor);color:#14101A;display:grid;place-items:center;box-shadow:0 10px 30px rgba(0,0,0,.45)}
+#btnPlay:active{transform:scale(.96)}
+#btnPlay svg{width:56px;height:56px;fill:currentColor}
+.bloco{margin-top:18px}
+.bloco .rot{font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.linha{display:flex;gap:8px;align-items:center}
+.linha button{flex:1;padding:14px 8px;background:var(--surface);border-radius:12px;font-weight:700;font-size:15px;text-align:center}
+.linha button:active{background:var(--surface2)}
+.linha button.on{background:var(--cor);color:#14101A}
+.linha .valor{min-width:74px;text-align:center;font-size:22px;font-weight:800;font-variant-numeric:tabular-nums}
+.linha .mais{flex:none;width:64px;font-size:26px;font-weight:700}
+.pts{display:flex;gap:8px;flex-wrap:wrap}
+.pts .p{padding:11px 15px;background:var(--surface);border-radius:11px;font-weight:700;font-variant-numeric:tabular-nums;font-size:15px}
+.pts .p:active{background:var(--cor);color:#14101A}
+.pts .add{background:var(--surface2);color:var(--cor)}
+.dica{color:var(--muted);font-size:12.5px;margin-top:8px;line-height:1.35}
+.prox{margin-top:auto;padding-top:20px;color:var(--muted);font-size:14px}
+.prox b{color:var(--ink);display:block;font-size:17px;font-weight:700;margin-top:3px}
+.aviso{position:fixed;left:50%;transform:translateX(-50%);bottom:26px;background:var(--surface2);padding:12px 20px;border-radius:999px;font-size:14px;font-weight:600;opacity:0;transition:opacity .25s;pointer-events:none;z-index:9;box-shadow:0 8px 24px rgba(0,0,0,.4)}
+.aviso.on{opacity:1}
+</style></head>
+<body>
+
+<div class="tela on" id="lista">
+  <div class="topo">
+    <h1>Formatura Montessori</h1>
+    <div class="sub">Cláudia Coelho · 2º período · 6 coreografias</div>
+    <div class="modos">
+      <button data-modo="ensaio" class="on">Ensaio</button>
+      <button data-modo="show">Apresentação</button>
+    </div>
+  </div>
+  <div id="baixarBox"></div>
+  <div id="coreos"></div>
+  <div class="rodape" id="rodape"></div>
+</div>
+
+<div class="tela" id="player">
+  <div class="phead">
+    <button class="voltar" id="btnVoltar">‹</button>
+    <span class="tema" id="pTema"></span>
+    <span class="cont" id="pCont"></span>
+  </div>
+  <div class="pcorpo">
+    <div class="tit"><div class="num" id="pNum"></div><h2 id="pTit"></h2><p id="pArt"></p></div>
+    <div class="prog" id="prog"><div class="trilho">
+      <div class="corte" id="cortIni"></div><div class="corte" id="cortFim"></div>
+      <div class="ab" id="abFaixa"></div><div class="feito" id="feito"></div>
+    </div></div>
+    <div class="tempos"><b id="tAtual">0:00</b><span id="tTotal">0:00</span></div>
+    <div class="transporte">
+      <button class="sec" id="btnVolta">↺<br>10s</button>
+      <button id="btnPlay"><svg id="icone" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+      <button class="sec" id="btnInicio">⤒<br>início</button>
+    </div>
+    <div id="controles"></div>
+    <div class="prox" id="prox"></div>
+  </div>
+</div>
+
+<div class="aviso" id="aviso"></div>
+<audio id="au" preload="auto"></audio>
+
+<script src="repertorio.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+const au = $("au");
+au.preservesPitch = true; au.webkitPreservesPitch = true; au.mozPreservesPitch = true;
+const fmt = s => { s = Math.max(0, Math.floor(s || 0)); return Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0"); };
+let modo = "ensaio", atual = null, loopA = null, loopB = null, wake = null;
+
+// ---------- ajustes por faixa (corte, pontos) ----------
+const CH = "palco.ajustes";
+let AJ = {}; try { AJ = JSON.parse(localStorage.getItem(CH) || "{}"); } catch {}
+const aj = id => (AJ[id] ||= { ini: 0, fim: null, pts: [], vel: 1 });
+const salvar = () => { try { localStorage.setItem(CH, JSON.stringify(AJ)); } catch {} };
+const dur = f => { const a = aj(f.id), d = a.fim ?? DUR[f.id] ?? 0; return Math.max(0, d - a.ini); };
+const DUR = { ...DUR_ORIG }; // do repertório; confirmado ao abrir a faixa
+
+function aviso(txt) { const a = $("aviso"); a.textContent = txt; a.classList.add("on"); clearTimeout(aviso.t); aviso.t = setTimeout(() => a.classList.remove("on"), 1600); }
+
+// ---------- lista ----------
+function renderLista() {
+  let h = "";
+  for (const c of ESPETACULO.coreografias) {
+    const total = c.faixas.reduce((s, f) => s + dur(f), 0);
+    h += `<div class="coreo" style="--cor:${c.cor}"><div class="cab">
+      <span class="bolinha" style="background:${c.cor}">${c.n}</span>
+      <span class="nome">${c.tema}</span>
+      <span class="meta">${c.faixas.length} · ${fmt(total)}</span></div>`;
+    for (const f of c.faixas) h += `<div class="faixa ${atual && atual.id === f.id ? "tocando" : ""}" data-id="${f.id}" style="--cor:${c.cor}">
+      <span class="n">${f.num}</span>
+      <span class="t"><b>${f.titulo}</b><span>${f.artista}${f.nota ? " · " + f.nota : ""}</span></span>
+      <span class="dur">${fmt(dur(f))}</span></div>`;
+    h += `</div>`;
+  }
+  $("coreos").innerHTML = h;
+  const tot = TODAS.reduce((s, f) => s + dur(f), 0);
+  $("rodape").textContent = `Espetáculo inteiro: ${fmt(tot)} · toque numa música para abrir`;
+}
+
+// ---------- offline ----------
+async function estadoDownload() {
+  if (!("caches" in window)) return { faltam: TODAS.length };
+  const c = await caches.open("musicas-v1");
+  let ok = 0; for (const f of TODAS) if (await c.match(`musicas/${f.id}.mp3`)) ok++;
+  return { ok, faltam: TODAS.length - ok };
+}
+async function renderBaixar() {
+  const { ok = 0, faltam } = await estadoDownload();
+  $("baixarBox").innerHTML = faltam === 0 ? "" : `<div class="baixar">
+    <b>Guardar as músicas no celular</b>
+    <p>São 52 MB. Depois disso o app funciona sem internet, no estúdio ou no palco.</p>
+    <div class="barra"><i id="barraDl"></i></div>
+    <button id="btnDl">Baixar as ${faltam} músicas</button></div>`;
+  const b = $("btnDl"); if (!b) return;
+  b.onclick = async () => {
+    b.disabled = true; const c = await caches.open("musicas-v1");
+    for (let i = 0; i < TODAS.length; i++) {
+      const u = `musicas/${TODAS[i].id}.mp3`;
+      try { if (!(await c.match(u))) await c.add(u); } catch { }
+      b.textContent = `Baixando ${i + 1} de ${TODAS.length}...`;
+      $("barraDl").style.width = ((i + 1) / TODAS.length * 100) + "%";
+    }
+    b.textContent = "Pronto, tudo no celular"; aviso("Músicas guardadas no celular");
+    setTimeout(renderBaixar, 1500);
+  };
+}
+
+// ---------- player ----------
+function abrir(f) {
+  atual = f; loopA = loopB = null;
+  const c = f.coreo; document.documentElement.style.setProperty("--cor", c.cor);
+  $("pTema").textContent = `${c.n} · ${c.tema}`;
+  const i = c.faixas.findIndex(x => x.id === f.id); $("pCont").textContent = `${i + 1} de ${c.faixas.length}`;
+  $("pNum").textContent = f.num; $("pTit").textContent = f.titulo; $("pArt").textContent = f.artista + (f.nota ? " · " + f.nota : "");
+  au.src = `musicas/${f.id}.mp3`; au.playbackRate = aj(f.id).vel || 1; au.load();
+  const prox = c.faixas[i + 1];
+  $("prox").innerHTML = prox ? `depois, na mesma coreografia:<b>${prox.num} ${prox.titulo}</b>` : `<span style="color:var(--cor);font-weight:700">última da coreografia ${c.tema}</span>`;
+  $("lista").classList.remove("on"); $("player").classList.add("on");
+  renderControles(); renderLista();
+  if ("mediaSession" in navigator) navigator.mediaSession.metadata = new MediaMetadata({ title: `${f.num} ${f.titulo}`, artist: f.artista, album: `${c.n} ${c.tema}` });
+}
+function renderControles() {
+  if (!atual) return;
+  const a = aj(atual.id);
+  if (modo === "show") { $("controles").innerHTML = `<div class="dica" style="margin-top:20px">Modo apresentação: toca do corte marcado e emenda na próxima da coreografia. Para no fim dela.</div>`; return; }
+  $("controles").innerHTML = `
+  <div class="bloco"><div class="rot">Velocidade (sem ficar grave)</div>
+    <div class="linha"><button class="mais" data-vel="-">−</button><span class="valor" id="velTxt">${Math.round((a.vel || 1) * 100)}%</span><button class="mais" data-vel="+">+</button><button data-vel="1">100%</button></div></div>
+  <div class="bloco"><div class="rot">Repetir um trecho</div>
+    <div class="linha"><button id="btnA">${loopA == null ? "marcar início" : "início " + fmt(loopA)}</button><button id="btnB">${loopB == null ? "marcar fim" : "fim " + fmt(loopB)}</button><button id="btnLimpaAB" class="mais">✕</button></div></div>
+  <div class="bloco"><div class="rot">Pontos da música</div>
+    <div class="pts" id="ptsBox"></div>
+    <div class="dica">Marque o refrão, a virada, a entrada de cada grupo. Um toque volta pra lá.</div></div>
+  <div class="bloco"><div class="rot">Corte usado na apresentação</div>
+    <div class="linha"><button id="btnIni">começa aqui</button><button id="btnFim">termina aqui</button><button id="btnLimpaCorte" class="mais">✕</button></div>
+    <div class="dica">${a.ini || a.fim ? `Tocando de ${fmt(a.ini)} até ${fmt(a.fim ?? (DUR[atual.id] || 0))} · ${fmt(dur(atual))}` : "Inteira. Marque onde a coreografia começa e acaba."}</div></div>`;
+  renderPts();
+  $("ptsBox").onclick = e => { const p = e.target.closest(".p"); if (!p) return;
+    if (p.dataset.add !== undefined) { const t = +au.currentTime.toFixed(1); a.pts = [...a.pts, t].sort((x, y) => x - y).slice(0, 8); salvar(); renderPts(); pintar(); aviso("Ponto marcado em " + fmt(t)); }
+    else if (p.dataset.i !== undefined) { const i = +p.dataset.i; if (p.dataset.rm !== undefined) return; au.currentTime = a.pts[i]; if (au.paused) tocar(); } };
+  $("ptsBox").oncontextmenu = e => { const p = e.target.closest(".p[data-i]"); if (!p) return; e.preventDefault(); a.pts.splice(+p.dataset.i, 1); salvar(); renderPts(); pintar(); aviso("Ponto apagado"); };
+  $("controles").querySelectorAll("[data-vel]").forEach(b => b.onclick = () => {
+    const v = b.dataset.vel; a.vel = v === "1" ? 1 : Math.min(1.2, Math.max(0.5, (a.vel || 1) + (v === "+" ? 0.05 : -0.05)));
+    a.vel = Math.round(a.vel * 100) / 100; au.playbackRate = a.vel; salvar(); $("velTxt").textContent = Math.round(a.vel * 100) + "%"; });
+  $("btnA").onclick = () => { loopA = au.currentTime; if (loopB != null && loopB <= loopA) loopB = null; renderControles(); pintar(); aviso("Início do trecho"); };
+  $("btnB").onclick = () => { loopB = au.currentTime; if (loopA == null) loopA = 0; renderControles(); pintar(); aviso("Repetindo o trecho"); };
+  $("btnLimpaAB").onclick = () => { loopA = loopB = null; renderControles(); pintar(); };
+  $("btnIni").onclick = () => { a.ini = +au.currentTime.toFixed(1); salvar(); renderControles(); pintar(); renderLista(); aviso("Começa em " + fmt(a.ini)); };
+  $("btnFim").onclick = () => { au.pause(); a.fim = +au.currentTime.toFixed(1); salvar(); renderControles(); pintar(); renderLista(); aviso("Termina em " + fmt(a.fim)); };
+  $("btnLimpaCorte").onclick = () => { a.ini = 0; a.fim = null; salvar(); renderControles(); pintar(); renderLista(); aviso("Música inteira"); };
+}
+function renderPts() { const a = aj(atual.id);
+  $("ptsBox").innerHTML = a.pts.map((t, i) => `<button class="p" data-i="${i}">${fmt(t)}</button>`).join("") + `<button class="p add" data-add>+ marcar aqui</button>`; }
+
+function pintar() {
+  const d = au.duration || 0; if (!d) return;
+  const a = aj(atual.id), pc = x => Math.max(0, Math.min(100, x / d * 100));
+  $("feito").style.width = pc(au.currentTime) + "%";
+  $("cortIni").style.cssText = `left:0;width:${pc(a.ini)}%`;
+  $("cortFim").style.cssText = `right:0;width:${a.fim ? 100 - pc(a.fim) : 0}%`;
+  $("abFaixa").style.cssText = loopA != null && loopB != null ? `left:${pc(loopA)}%;width:${pc(loopB) - pc(loopA)}%` : "width:0";
+  $("prog").querySelectorAll(".pt").forEach(e => e.remove());
+  for (const t of a.pts) { const e = document.createElement("div"); e.className = "pt"; e.style.left = pc(t) + "%"; $("prog").firstElementChild.appendChild(e); }
+  $("tAtual").textContent = fmt(au.currentTime); $("tTotal").textContent = fmt(a.fim ?? d);
+}
+function icone(tocando) { $("icone").innerHTML = tocando ? '<path d="M6 5h4v14H6zm8 0h4v14h-4z"/>' : '<path d="M8 5v14l11-7z"/>'; }
+async function tocar() {
+  const a = aj(atual.id);
+  if (au.currentTime < a.ini - 0.3 || (a.fim && au.currentTime >= a.fim - 0.05)) au.currentTime = a.ini;
+  au.playbackRate = modo === "show" ? 1 : (a.vel || 1);
+  try { await au.play(); } catch (e) { aviso("Toque de novo para liberar o som"); }
+  try { wake = wake || await navigator.wakeLock?.request("screen"); } catch {}
+}
+function pausar() { au.pause(); }
+$("btnPlay").onclick = () => au.paused ? tocar() : pausar();
+$("btnVolta").onclick = () => { au.currentTime = Math.max(aj(atual.id).ini, au.currentTime - 10); };
+$("btnInicio").onclick = () => { au.currentTime = aj(atual.id).ini; if (au.paused) tocar(); };
+$("btnVoltar").onclick = () => { $("player").classList.remove("on"); $("lista").classList.add("on"); renderLista(); };
+$("prog").onclick = e => { const r = $("prog").getBoundingClientRect(); au.currentTime = (e.clientX - r.left) / r.width * (au.duration || 0); pintar(); };
+au.onplay = () => icone(true); au.onpause = () => { icone(false); wake?.release?.(); wake = null; };
+au.onloadedmetadata = () => { DUR[atual.id] = au.duration; const a = aj(atual.id); if (au.currentTime < a.ini) au.currentTime = a.ini; pintar(); renderControles(); renderLista(); };
+au.onended = () => { if (modo === "show") proxima(); else { au.currentTime = aj(atual.id).ini; icone(false); } };
+function proxima() {
+  const c = atual.coreo, i = c.faixas.findIndex(x => x.id === atual.id), p = TODAS.find(x => x.id === c.faixas[i + 1]?.id);
+  if (p) { abrir(p); setTimeout(tocar, 120); } else { icone(false); aviso("Fim da coreografia " + c.tema); }
+}
+// laço de repetição e corte final: checado a cada quadro, mais preciso que o evento do áudio
+(function loop() {
+  if (atual && !au.paused) {
+    const a = aj(atual.id);
+    if (loopA != null && loopB != null && au.currentTime >= loopB) au.currentTime = loopA;
+    else if (a.fim && au.currentTime >= a.fim) { au.pause(); au.currentTime = a.ini; if (modo === "show") proxima(); else aviso("Fim do corte"); }
+    pintar();
+  }
+  requestAnimationFrame(loop);
+})();
+
+document.querySelector(".modos").onclick = e => { const b = e.target.closest("[data-modo]"); if (!b) return;
+  modo = b.dataset.modo; document.querySelectorAll("[data-modo]").forEach(x => x.classList.toggle("on", x === b));
+  if (atual) { au.playbackRate = modo === "show" ? 1 : (aj(atual.id).vel || 1); renderControles(); }
+  aviso(modo === "show" ? "Modo apresentação: sem ajustes, só tocar" : "Modo ensaio: velocidade, trecho e pontos"); };
+$("coreos").onclick = e => { const f = e.target.closest(".faixa"); if (!f) return; abrir(TODAS.find(x => x.id === f.dataset.id)); };
+
+if ("mediaSession" in navigator) { navigator.mediaSession.setActionHandler("play", tocar); navigator.mediaSession.setActionHandler("pause", pausar);
+  navigator.mediaSession.setActionHandler("nexttrack", proxima); }
+document.addEventListener("visibilitychange", async () => { if (!document.hidden && !au.paused) { try { wake = wake || await navigator.wakeLock?.request("screen"); } catch {} } });
+if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(() => {});
+renderLista(); renderBaixar();
+</script>
+</body></html>
