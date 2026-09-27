@@ -140,12 +140,13 @@ let modo = "ensaio", atual = null, loopA = null, loopB = null, wake = null;
 // ---------- ajustes por faixa (corte, pontos) ----------
 const CH = "palco.ajustes";
 let AJ = {}; try { AJ = JSON.parse(localStorage.getItem(CH) || "{}"); } catch {}
-const aj = id => (AJ[id] ||= { ini: 0, fim: null, pts: [], vel: 1, v: 1 });
+const PADRAO = Object.fromEntries(TODAS.map(f => [f.id, f.corte || null]));
+const aj = id => (AJ[id] ||= { ini: PADRAO[id]?.[0] ?? 0, fim: PADRAO[id]?.[1] ?? null, pts: [], vel: 1, v: 1 });
 // se eu troquei a gravação, o corte antigo aponta pro lugar errado: zera e marca pra avisar
 const TROCADAS = [];
 for (const f of TODAS) { const a = aj(f.id), v = f.v || 1;
-  if ((a.v || 1) !== v) { if (a.ini || a.fim || a.pts.length) TROCADAS.push(f.id);
-    Object.assign(a, { ini: 0, fim: null, pts: [], v }); } }
+  if ((a.v || 1) !== v) { if (a.dela) TROCADAS.push(f.id);
+    Object.assign(a, { ini: PADRAO[f.id]?.[0] ?? 0, fim: PADRAO[f.id]?.[1] ?? null, pts: [], v }); } }
 if (TROCADAS.length) try { localStorage.setItem(CH, JSON.stringify(AJ)); } catch {}
 const salvar = () => { try { localStorage.setItem(CH, JSON.stringify(AJ)); } catch {} };
 const dur = f => { const a = aj(f.id), d = a.fim ?? DUR[f.id] ?? 0; return Math.max(0, d - a.ini); };
@@ -238,7 +239,7 @@ function renderControles() {
     <div class="dica">${a.ini || a.fim ? `Tocando de ${fmt(a.ini)} até ${fmt(a.fim ?? (DUR[atual.id] || 0))} · ${fmt(dur(atual))}` : "Inteira. Marque onde a coreografia começa e acaba."}</div></div>`;
   renderPts();
   $("ptsBox").onclick = e => { const p = e.target.closest(".p"); if (!p) return;
-    if (p.dataset.add !== undefined) { const t = +au.currentTime.toFixed(1); a.pts = [...a.pts, t].sort((x, y) => x - y).slice(0, 8); salvar(); renderPts(); pintar(); aviso("Ponto marcado em " + fmt(t)); }
+    if (p.dataset.add !== undefined) { const t = +au.currentTime.toFixed(1); a.pts = [...a.pts, t].sort((x, y) => x - y).slice(0, 8); a.dela = true; salvar(); renderPts(); pintar(); aviso("Ponto marcado em " + fmt(t)); }
     else if (p.dataset.i !== undefined) { const i = +p.dataset.i; if (p.dataset.rm !== undefined) return; au.currentTime = a.pts[i]; if (au.paused) tocar(); } };
   $("ptsBox").oncontextmenu = e => { const p = e.target.closest(".p[data-i]"); if (!p) return; e.preventDefault(); a.pts.splice(+p.dataset.i, 1); salvar(); renderPts(); pintar(); aviso("Ponto apagado"); };
   $("controles").querySelectorAll("[data-vel]").forEach(b => b.onclick = () => {
@@ -247,9 +248,9 @@ function renderControles() {
   $("btnA").onclick = () => { loopA = au.currentTime; if (loopB != null && loopB <= loopA) loopB = null; renderControles(); pintar(); aviso("Início do trecho"); };
   $("btnB").onclick = () => { loopB = au.currentTime; if (loopA == null) loopA = 0; renderControles(); pintar(); aviso("Repetindo o trecho"); };
   $("btnLimpaAB").onclick = () => { loopA = loopB = null; renderControles(); pintar(); };
-  $("btnIni").onclick = () => { a.ini = +au.currentTime.toFixed(1); salvar(); renderControles(); pintar(); renderLista(); aviso("Começa em " + fmt(a.ini)); };
-  $("btnFim").onclick = () => { au.pause(); a.fim = +au.currentTime.toFixed(1); salvar(); renderControles(); pintar(); renderLista(); aviso("Termina em " + fmt(a.fim)); };
-  $("btnLimpaCorte").onclick = () => { a.ini = 0; a.fim = null; salvar(); renderControles(); pintar(); renderLista(); aviso("Música inteira"); };
+  $("btnIni").onclick = () => { a.dela = true; a.ini = +au.currentTime.toFixed(1); salvar(); renderControles(); pintar(); renderLista(); aviso("Começa em " + fmt(a.ini)); };
+  $("btnFim").onclick = () => { a.dela = true; au.pause(); a.fim = +au.currentTime.toFixed(1); salvar(); renderControles(); pintar(); renderLista(); aviso("Termina em " + fmt(a.fim)); };
+  $("btnLimpaCorte").onclick = () => { a.ini = PADRAO[atual.id]?.[0] ?? 0; a.fim = PADRAO[atual.id]?.[1] ?? null; salvar(); renderControles(); pintar(); renderLista(); aviso(a.fim ? "Voltou pro corte sugerido" : "Música inteira"); };
 }
 function renderPts() { const a = aj(atual.id);
   $("ptsBox").innerHTML = a.pts.map((t, i) => `<button class="p" data-i="${i}">${fmt(t)}</button>`).join("") + `<button class="p add" data-add>+ marcar aqui</button>`; }

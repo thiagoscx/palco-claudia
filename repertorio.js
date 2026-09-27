@@ -21,7 +21,7 @@ const ESPETACULO = {
       { id: "5-2", dur: 207, num: "5.2", titulo: "Oração ao Tempo", artista: "Caetano Veloso" },
       { id: "5-3", dur: 145, num: "5.3", titulo: "Fábrica de Saudades", artista: "Carrossel" } ] },
     { n: 6, tema: "Gratidão", cor: "#4EA8DE", faixas: [
-      { id: "6-1", dur: 316, num: "6.1", titulo: "Adventure of a Lifetime", artista: "Coldplay", nota: "só o começo, como efeito" },
+      { id: "6-1", v: 2, dur: 264, corte: [0, 36.3], num: "6.1", titulo: "Adventure of a Lifetime", artista: "Coldplay", nota: "só o começo, como efeito" },
       { id: "6-2", dur: 110, num: "6.2", titulo: "Flores de Gratidão", artista: "Universo da Música Infantil" },
       { id: "6-3", dur: 230, num: "6.3", titulo: "Sementes do Amanhã", artista: "Gonzaguinha" },
       { id: "6-4", dur: 166, num: "6.4", titulo: "Depende de Nós", artista: "Ivan Lins" },
@@ -32,4 +32,5 @@ const TODAS = ESPETACULO.coreografias.flatMap(c => c.faixas.map(f => ({ ...f, co
 const DUR_ORIG = Object.fromEntries(TODAS.map(f => [f.id, f.dur]));
 // Trocar uma música: substitui o mp3, atualiza dur e SOBE o v da faixa (v: 2, 3...).
 // O v entra na URL, então o celular dela busca o arquivo novo em vez do que já está no cache.
+// corte: [inicio, fim] que eu já deixo pronto; ela pode mudar no app a qualquer momento.
 const URL_FAIXA = f => `musicas/${f.id}.mp3` + ((f.v || 1) > 1 ? `?v=${f.v}` : "");
