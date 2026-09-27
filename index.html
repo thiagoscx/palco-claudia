@@ -144,9 +144,16 @@ const PADRAO = Object.fromEntries(TODAS.map(f => [f.id, f.corte || null]));
 const aj = id => (AJ[id] ||= { ini: PADRAO[id]?.[0] ?? 0, fim: PADRAO[id]?.[1] ?? null, pts: [], vel: 1, v: 1 });
 // se eu troquei a gravação, o corte antigo aponta pro lugar errado: zera e marca pra avisar
 const TROCADAS = [];
-for (const f of TODAS) { const a = aj(f.id), v = f.v || 1;
-  if ((a.v || 1) !== v) { if (a.dela) TROCADAS.push(f.id);
-    Object.assign(a, { ini: PADRAO[f.id]?.[0] ?? 0, fim: PADRAO[f.id]?.[1] ?? null, pts: [], v }); } }
+for (const f of TODAS) {
+  const a = aj(f.id), v = f.v || 1, trocou = (a.v || 1) !== v;
+  if (trocou && a.dela) TROCADAS.push(f.id);
+  // meu corte vale sempre que ela ainda não mexeu naquela faixa (ou quando eu troquei a gravação).
+  // assim o corte chega mesmo se a atualização vier pela metade, sem depender de ordem.
+  if (trocou || !a.dela) {
+    a.ini = PADRAO[f.id]?.[0] ?? 0; a.fim = PADRAO[f.id]?.[1] ?? null; a.v = v;
+    if (trocou) { a.pts = []; a.dela = false; }
+  }
+}
 if (TROCADAS.length) try { localStorage.setItem(CH, JSON.stringify(AJ)); } catch {}
 const salvar = () => { try { localStorage.setItem(CH, JSON.stringify(AJ)); } catch {} };
 const dur = f => { const a = aj(f.id), d = a.fim ?? DUR[f.id] ?? 0; return Math.max(0, d - a.ini); };
@@ -307,7 +314,7 @@ $("coreos").onclick = e => { const f = e.target.closest(".faixa"); if (!f) retur
 if ("mediaSession" in navigator) { navigator.mediaSession.setActionHandler("play", tocar); navigator.mediaSession.setActionHandler("pause", pausar);
   navigator.mediaSession.setActionHandler("nexttrack", proxima); }
 document.addEventListener("visibilitychange", async () => { if (!document.hidden && !au.paused) { try { wake = wake || await navigator.wakeLock?.request("screen"); } catch {} } });
-const VERSAO = 4;
+const VERSAO = 5;
 let recarregando = false, esperando = false;
 function recarregar() { if (recarregando) return; recarregando = true; location.reload(); }
 if ("serviceWorker" in navigator) {
