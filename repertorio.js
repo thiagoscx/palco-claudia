@@ -5,7 +5,7 @@ const ESPETACULO = {
   coreografias: [
     { n: 1, tema: "Alegria",  cor: "#FFB627", faixas: [
       { id: "1-2", dur: 222, num: "1.1", titulo: "Tempo de Alegria", artista: "Ivete Sangalo" },
-      { id: "1-1", dur: 185, num: "1.2", titulo: "Bagunça de Criança", artista: "Mundo Bita" } ] },
+      { id: "1-1", v: 2, dur: 180, num: "1.2", titulo: "Bagunça de Criança", artista: "Mundo Bita", nota: "sem a fala do começo" } ] },
     { n: 2, tema: "Amor",     cor: "#FF5D8F", faixas: [
       { id: "2-1c", v: 2, dur: 159, num: "2.1", titulo: "Como É Grande o Meu Amor por Você", artista: "Melim", nota: "em 105%" },
       { id: "2-2c", v: 3, dur: 187, num: "2.2", titulo: "Oração", artista: "instrumental + remix JetLag", nota: "instrumental até 0:47, remix inteiro" },
