@@ -7,7 +7,7 @@ const ESPETACULO = {
       { id: "1-1", dur: 185, num: "1.1", titulo: "Bagunça de Criança", artista: "Mundo Bita", nota: "entrada" },
       { id: "1-2", dur: 222, num: "1.2", titulo: "Tempo de Alegria", artista: "Ivete Sangalo" } ] },
     { n: 2, tema: "Amor",     cor: "#FF5D8F", faixas: [
-      { id: "2-1c", dur: 167, num: "2.1", titulo: "Como É Grande o Meu Amor por Você", artista: "Melim" },
+      { id: "2-1c", v: 2, dur: 159, num: "2.1", titulo: "Como É Grande o Meu Amor por Você", artista: "Melim", nota: "em 105%" },
       { id: "2-2c", v: 2, dur: 114, num: "2.2", titulo: "Oração", artista: "instrumental + remix JetLag", nota: "emendada: instrumental até 0:47 e o remix entra na batida" },
       { id: "2-2g", v: 2, dur: 186, num: "2.2", titulo: "Oração", artista: "instrumental + remix JetLag", nota: "opção: emenda em 0:46, remix inteiro, 3 min" },
       { id: "2-3", dur: 161, num: "2.3", titulo: "Sunflower", artista: "Post Malone & Swae Lee", nota: "cantada" } ] },
