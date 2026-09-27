@@ -11,7 +11,8 @@ const ESPETACULO = {
       { id: "2-2", v: 2, dur: 301, num: "2.2", titulo: "Oração", artista: "A Banda Mais Bonita da Cidade", nota: "estúdio, sem plateia" },
       { id: "2-2b", dur: 227, num: "2.2", titulo: "Oração", artista: "Leo Fressato", nota: "opção: voz e violão, do compositor" },
       { id: "2-2c", dur: 114, num: "2.2", titulo: "Oração", artista: "instrumental", nota: "opção: sem voz" },
-      { id: "2-2d", dur: 174, num: "2.2", titulo: "Oração", artista: "piano", nota: "opção: só piano" } ] },
+      { id: "2-2d", dur: 174, num: "2.2", titulo: "Oração", artista: "piano", nota: "opção: só piano" },
+      { id: "2-3", dur: 161, num: "2.3", titulo: "Sunflower", artista: "Post Malone & Swae Lee", nota: "cantada" } ] },
     { n: 3, tema: "Coragem",  cor: "#FF6B35", faixas: [
       { id: "3-1a", dur: 203, num: "3.1", titulo: "What's Up Danger", artista: "instrumental" },
       { id: "3-1b", dur: 158, num: "3.1", titulo: "Sunflower", artista: "instrumental", nota: "emenda na anterior" },
