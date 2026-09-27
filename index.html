@@ -171,9 +171,9 @@ function renderLista() {
   }
   $("coreos").innerHTML = h;
   const tot = TODAS.reduce((s, f) => s + dur(f), 0);
-  $("rodape").textContent = TROCADAS.length
-    ? `Troquei ${TROCADAS.length} música${TROCADAS.length > 1 ? "s" : ""}: marque o corte de novo nelas (estão como "novo"). Espetáculo: ${fmt(tot)}`
-    : `Espetáculo inteiro: ${fmt(tot)} · toque numa música para abrir · v${VERSAO}`;
+  $("rodape").innerHTML = TROCADAS.length
+    ? `Troquei ${TROCADAS.length} música${TROCADAS.length > 1 ? "s" : ""}: marque o corte de novo nelas (estão como "novo"). Espetáculo: ${fmt(tot)} · <button id="btnAtualizar" style="color:var(--muted);text-decoration:underline">atualizar o app</button> · v${VERSAO}`
+    : `Espetáculo inteiro: ${fmt(tot)} · toque numa música para abrir · <button id="btnAtualizar" style="color:var(--muted);text-decoration:underline">atualizar o app</button> · v${VERSAO}`;
 }
 
 // ---------- offline ----------
@@ -307,16 +307,29 @@ $("coreos").onclick = e => { const f = e.target.closest(".faixa"); if (!f) retur
 if ("mediaSession" in navigator) { navigator.mediaSession.setActionHandler("play", tocar); navigator.mediaSession.setActionHandler("pause", pausar);
   navigator.mediaSession.setActionHandler("nexttrack", proxima); }
 document.addEventListener("visibilitychange", async () => { if (!document.hidden && !au.paused) { try { wake = wake || await navigator.wakeLock?.request("screen"); } catch {} } });
-const VERSAO = 3;
+const VERSAO = 4;
+let recarregando = false, esperando = false;
+function recarregar() { if (recarregando) return; recarregando = true; location.reload(); }
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("sw.js").catch(() => {});
-  // quando a versão nova assume, recarrega uma vez sozinho: senão ela continua vendo a lista velha
-  let recarregando = false;
-  navigator.serviceWorker.addEventListener("controllerchange", () => { if (!recarregando) { recarregando = true; location.reload(); } });
-  navigator.serviceWorker.getRegistration().then(r => r?.update().catch(() => {}));
+  // versão nova assumiu: recarrega sozinho, mas NUNCA no meio de uma música tocando
+  navigator.serviceWorker.addEventListener("controllerchange", () => { if (au.paused) recarregar(); else { esperando = true; aviso("Tem versão nova, entra quando você pausar"); } });
+  au.addEventListener("pause", () => { if (esperando) recarregar(); });
+  const procurar = () => navigator.serviceWorker.getRegistration().then(r => r?.update().catch(() => {}));
+  procurar();
+  // toda vez que ela volta pro app (ícone da tela de início), procuro atualização
+  document.addEventListener("visibilitychange", () => { if (!document.hidden) procurar(); });
+  setInterval(procurar, 10 * 60 * 1000);
 }
-// pede pro Android não apagar as músicas quando a memória do celular apertar
-navigator.storage?.persist?.().catch(() => {});
+// escape manual: joga fora a cópia guardada do app (as músicas ficam) e abre a versão nova
+async function atualizarNaMao() {
+  if (!au.paused && !confirm("Vai parar a música para atualizar. Pode?")) return;
+  au.pause(); aviso("Atualizando...");
+  try { for (const k of await caches.keys()) if (k.startsWith("app-")) await caches.delete(k);
+    const r = await navigator.serviceWorker?.getRegistration(); await r?.update(); } catch {}
+  setTimeout(() => location.reload(true), 700);
+}
+document.addEventListener("click", e => { if (e.target.id === "btnAtualizar") atualizarNaMao(); });
 renderLista(); renderBaixar();
 </script>
 </body></html>
