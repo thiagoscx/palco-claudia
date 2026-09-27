@@ -91,8 +91,10 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 
 <div class="tela on" id="lista">
   <div class="topo">
-    <h1>Formatura Montessori</h1>
-    <div class="sub">Cláudia Coelho · 2º período · 6 coreografias</div>
+    <div style="display:flex;align-items:flex-start;gap:10px">
+      <div style="flex:1"><h1>Formatura Montessori</h1><div class="sub">Cláudia Coelho · 2º período · 6 coreografias</div></div>
+      <button id="btnAtualizarTopo" style="flex:none;padding:10px 14px;background:var(--surface);border-radius:12px;font-weight:700;font-size:14px;color:var(--ink)">↻ atualizar</button>
+    </div>
     <div class="modos">
       <button data-modo="ensaio" class="on">Ensaio</button>
       <button data-modo="show">Apresentação</button>
@@ -314,7 +316,7 @@ $("coreos").onclick = e => { const f = e.target.closest(".faixa"); if (!f) retur
 if ("mediaSession" in navigator) { navigator.mediaSession.setActionHandler("play", tocar); navigator.mediaSession.setActionHandler("pause", pausar);
   navigator.mediaSession.setActionHandler("nexttrack", proxima); }
 document.addEventListener("visibilitychange", async () => { if (!document.hidden && !au.paused) { try { wake = wake || await navigator.wakeLock?.request("screen"); } catch {} } });
-const VERSAO = 7;
+const VERSAO = 8;
 let recarregando = false, esperando = false;
 function recarregar() { if (recarregando) return; recarregando = true; location.reload(); }
 if ("serviceWorker" in navigator) {
@@ -336,12 +338,12 @@ if ("serviceWorker" in navigator) {
 // escape manual: joga fora a cópia guardada do app (as músicas ficam) e abre a versão nova
 async function atualizarNaMao() {
   if (!au.paused && !confirm("Vai parar a música para atualizar. Pode?")) return;
-  au.pause(); aviso("Atualizando...");
+  au.pause(); aviso("Buscando a versão mais nova..."); const b = $("btnAtualizarTopo"); if (b) b.textContent = "↻ ...";
   try { for (const k of await caches.keys()) if (k.startsWith("app-")) await caches.delete(k);
     const r = await navigator.serviceWorker?.getRegistration(); await r?.update(); } catch {}
   setTimeout(() => location.reload(true), 700);
 }
-document.addEventListener("click", e => { if (e.target.id === "btnAtualizar") atualizarNaMao(); });
+document.addEventListener("click", e => { if (e.target.id === "btnAtualizar" || e.target.id === "btnAtualizarTopo") atualizarNaMao(); });
 renderLista(); renderBaixar();
 </script>
 </body></html>
