@@ -173,7 +173,7 @@ function renderLista() {
   const tot = TODAS.reduce((s, f) => s + dur(f), 0);
   $("rodape").textContent = TROCADAS.length
     ? `Troquei ${TROCADAS.length} música${TROCADAS.length > 1 ? "s" : ""}: marque o corte de novo nelas (estão como "novo"). Espetáculo: ${fmt(tot)}`
-    : `Espetáculo inteiro: ${fmt(tot)} · toque numa música para abrir`;
+    : `Espetáculo inteiro: ${fmt(tot)} · toque numa música para abrir · v${VERSAO}`;
 }
 
 // ---------- offline ----------
@@ -307,7 +307,14 @@ $("coreos").onclick = e => { const f = e.target.closest(".faixa"); if (!f) retur
 if ("mediaSession" in navigator) { navigator.mediaSession.setActionHandler("play", tocar); navigator.mediaSession.setActionHandler("pause", pausar);
   navigator.mediaSession.setActionHandler("nexttrack", proxima); }
 document.addEventListener("visibilitychange", async () => { if (!document.hidden && !au.paused) { try { wake = wake || await navigator.wakeLock?.request("screen"); } catch {} } });
-if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(() => {});
+const VERSAO = 3;
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("sw.js").catch(() => {});
+  // quando a versão nova assume, recarrega uma vez sozinho: senão ela continua vendo a lista velha
+  let recarregando = false;
+  navigator.serviceWorker.addEventListener("controllerchange", () => { if (!recarregando) { recarregando = true; location.reload(); } });
+  navigator.serviceWorker.getRegistration().then(r => r?.update().catch(() => {}));
+}
 // pede pro Android não apagar as músicas quando a memória do celular apertar
 navigator.storage?.persist?.().catch(() => {});
 renderLista(); renderBaixar();

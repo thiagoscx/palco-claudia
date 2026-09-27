@@ -1,6 +1,6 @@
 // Offline: o app fica no cache "app-vN"; as músicas num cache separado ("musicas-v1")
 // que NÃO é apagado quando eu atualizo o app, pra ela não rebaixar 52 MB.
-const APP = "app-v2";
+const APP = "app-v3";
 const SHELL = ["./", "index.html", "repertorio.js", "manifest.json", "icone.png"];
 self.addEventListener("install", e => { self.skipWaiting(); e.waitUntil(caches.open(APP).then(c => c.addAll(SHELL)).catch(() => {})); });
 self.addEventListener("activate", e => { e.waitUntil((async () => {
