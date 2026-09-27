@@ -30,3 +30,6 @@ const ESPETACULO = {
 };
 const TODAS = ESPETACULO.coreografias.flatMap(c => c.faixas.map(f => ({ ...f, coreo: c })));
 const DUR_ORIG = Object.fromEntries(TODAS.map(f => [f.id, f.dur]));
+// Trocar uma música: substitui o mp3, atualiza dur e SOBE o v da faixa (v: 2, 3...).
+// O v entra na URL, então o celular dela busca o arquivo novo em vez do que já está no cache.
+const URL_FAIXA = f => `musicas/${f.id}.mp3` + ((f.v || 1) > 1 ? `?v=${f.v}` : "");

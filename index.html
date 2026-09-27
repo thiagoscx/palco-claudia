@@ -140,7 +140,13 @@ let modo = "ensaio", atual = null, loopA = null, loopB = null, wake = null;
 // ---------- ajustes por faixa (corte, pontos) ----------
 const CH = "palco.ajustes";
 let AJ = {}; try { AJ = JSON.parse(localStorage.getItem(CH) || "{}"); } catch {}
-const aj = id => (AJ[id] ||= { ini: 0, fim: null, pts: [], vel: 1 });
+const aj = id => (AJ[id] ||= { ini: 0, fim: null, pts: [], vel: 1, v: 1 });
+// se eu troquei a gravação, o corte antigo aponta pro lugar errado: zera e marca pra avisar
+const TROCADAS = [];
+for (const f of TODAS) { const a = aj(f.id), v = f.v || 1;
+  if ((a.v || 1) !== v) { if (a.ini || a.fim || a.pts.length) TROCADAS.push(f.id);
+    Object.assign(a, { ini: 0, fim: null, pts: [], v }); } }
+if (TROCADAS.length) try { localStorage.setItem(CH, JSON.stringify(AJ)); } catch {}
 const salvar = () => { try { localStorage.setItem(CH, JSON.stringify(AJ)); } catch {} };
 const dur = f => { const a = aj(f.id), d = a.fim ?? DUR[f.id] ?? 0; return Math.max(0, d - a.ini); };
 const DUR = { ...DUR_ORIG }; // do repertório; confirmado ao abrir a faixa
@@ -159,37 +165,43 @@ function renderLista() {
     for (const f of c.faixas) h += `<div class="faixa ${atual && atual.id === f.id ? "tocando" : ""}" data-id="${f.id}" style="--cor:${c.cor}">
       <span class="n">${f.num}</span>
       <span class="t"><b>${f.titulo}</b><span>${f.artista}${f.nota ? " · " + f.nota : ""}</span></span>
-      <span class="dur">${fmt(dur(f))}</span></div>`;
+      <span class="dur">${TROCADAS.includes(f.id) ? "novo" : fmt(dur(f))}</span></div>`;
     h += `</div>`;
   }
   $("coreos").innerHTML = h;
   const tot = TODAS.reduce((s, f) => s + dur(f), 0);
-  $("rodape").textContent = `Espetáculo inteiro: ${fmt(tot)} · toque numa música para abrir`;
+  $("rodape").textContent = TROCADAS.length
+    ? `Troquei ${TROCADAS.length} música${TROCADAS.length > 1 ? "s" : ""}: marque o corte de novo nelas (estão como "novo"). Espetáculo: ${fmt(tot)}`
+    : `Espetáculo inteiro: ${fmt(tot)} · toque numa música para abrir`;
 }
 
 // ---------- offline ----------
 async function estadoDownload() {
   if (!("caches" in window)) return { faltam: TODAS.length };
   const c = await caches.open("musicas-v1");
-  let ok = 0; for (const f of TODAS) if (await c.match(`musicas/${f.id}.mp3`)) ok++;
+  let ok = 0; for (const f of TODAS) if (await c.match(URL_FAIXA(f))) ok++;
   return { ok, faltam: TODAS.length - ok };
 }
 async function renderBaixar() {
   const { ok = 0, faltam } = await estadoDownload();
+  const primeira = ok === 0;
   $("baixarBox").innerHTML = faltam === 0 ? "" : `<div class="baixar">
-    <b>Guardar as músicas no celular</b>
-    <p>São 52 MB. Depois disso o app funciona sem internet, no estúdio ou no palco.</p>
+    <b>${primeira ? "Guardar as músicas no celular" : `${faltam} música${faltam > 1 ? "s" : ""} trocada${faltam > 1 ? "s" : ""}`}</b>
+    <p>${primeira ? "São 52 MB. Depois disso o app funciona sem internet, no estúdio ou no palco."
+      : "Precisa de internet só agora, pra pegar a versão nova. Depois volta a funcionar offline."}</p>
     <div class="barra"><i id="barraDl"></i></div>
-    <button id="btnDl">Baixar as ${faltam} músicas</button></div>`;
+    <button id="btnDl">${primeira ? `Baixar as ${faltam} músicas` : `Atualizar ${faltam === 1 ? "a música" : "as " + faltam + " músicas"}`}</button></div>`;
   const b = $("btnDl"); if (!b) return;
   b.onclick = async () => {
     b.disabled = true; const c = await caches.open("musicas-v1");
     for (let i = 0; i < TODAS.length; i++) {
-      const u = `musicas/${TODAS[i].id}.mp3`;
+      const u = URL_FAIXA(TODAS[i]);
       try { if (!(await c.match(u))) await c.add(u); } catch { }
       b.textContent = `Baixando ${i + 1} de ${TODAS.length}...`;
       $("barraDl").style.width = ((i + 1) / TODAS.length * 100) + "%";
     }
+    const validas = new Set(TODAS.map(f => new URL(URL_FAIXA(f), location.href).href));
+    for (const req of await c.keys()) if (!validas.has(req.url)) await c.delete(req); // versões velhas
     b.textContent = "Pronto, tudo no celular"; aviso("Músicas guardadas no celular");
     setTimeout(renderBaixar, 1500);
   };
@@ -202,7 +214,7 @@ function abrir(f) {
   $("pTema").textContent = `${c.n} · ${c.tema}`;
   const i = c.faixas.findIndex(x => x.id === f.id); $("pCont").textContent = `${i + 1} de ${c.faixas.length}`;
   $("pNum").textContent = f.num; $("pTit").textContent = f.titulo; $("pArt").textContent = f.artista + (f.nota ? " · " + f.nota : "");
-  au.src = `musicas/${f.id}.mp3`; au.playbackRate = aj(f.id).vel || 1; au.load();
+  au.src = URL_FAIXA(f); au.playbackRate = aj(f.id).vel || 1; au.load();
   const prox = c.faixas[i + 1];
   $("prox").innerHTML = prox ? `depois, na mesma coreografia:<b>${prox.num} ${prox.titulo}</b>` : `<span style="color:var(--cor);font-weight:700">última da coreografia ${c.tema}</span>`;
   $("lista").classList.remove("on"); $("player").classList.add("on");
