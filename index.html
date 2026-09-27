@@ -203,6 +203,7 @@ async function renderBaixar() {
     <button id="btnDl">${primeira ? `Baixar as ${faltam} músicas` : `Atualizar ${faltam === 1 ? "a música" : "as " + faltam + " músicas"}`}</button></div>`;
   const b = $("btnDl"); if (!b) return;
   b.onclick = async () => {
+    if (b.disabled) return;
     b.disabled = true; const c = await caches.open("musicas-v1");
     for (let i = 0; i < TODAS.length; i++) {
       const u = URL_FAIXA(TODAS[i]);
@@ -212,9 +213,10 @@ async function renderBaixar() {
     }
     const validas = new Set(TODAS.map(f => new URL(URL_FAIXA(f), location.href).href));
     for (const req of await c.keys()) if (!validas.has(req.url)) await c.delete(req); // versões velhas
-    b.textContent = "Pronto, tudo no celular"; aviso("Músicas guardadas no celular");
+    b.textContent = "Pronto, tudo no celular"; aviso(primeira ? "Músicas guardadas no celular" : "Música nova já está no celular");
     setTimeout(renderBaixar, 1500);
   };
+  if (!primeira && navigator.onLine) { b.textContent = "Baixando a versão nova..."; b.click(); }
 }
 
 // ---------- player ----------
@@ -316,7 +318,7 @@ $("coreos").onclick = e => { const f = e.target.closest(".faixa"); if (!f) retur
 if ("mediaSession" in navigator) { navigator.mediaSession.setActionHandler("play", tocar); navigator.mediaSession.setActionHandler("pause", pausar);
   navigator.mediaSession.setActionHandler("nexttrack", proxima); }
 document.addEventListener("visibilitychange", async () => { if (!document.hidden && !au.paused) { try { wake = wake || await navigator.wakeLock?.request("screen"); } catch {} } });
-const VERSAO = 8;
+const VERSAO = 9;
 let recarregando = false, esperando = false;
 function recarregar() { if (recarregando) return; recarregando = true; location.reload(); }
 if ("serviceWorker" in navigator) {
