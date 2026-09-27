@@ -314,7 +314,7 @@ $("coreos").onclick = e => { const f = e.target.closest(".faixa"); if (!f) retur
 if ("mediaSession" in navigator) { navigator.mediaSession.setActionHandler("play", tocar); navigator.mediaSession.setActionHandler("pause", pausar);
   navigator.mediaSession.setActionHandler("nexttrack", proxima); }
 document.addEventListener("visibilitychange", async () => { if (!document.hidden && !au.paused) { try { wake = wake || await navigator.wakeLock?.request("screen"); } catch {} } });
-const VERSAO = 6;
+const VERSAO = 7;
 let recarregando = false, esperando = false;
 function recarregar() { if (recarregando) return; recarregando = true; location.reload(); }
 if ("serviceWorker" in navigator) {
@@ -322,11 +322,16 @@ if ("serviceWorker" in navigator) {
   // versão nova assumiu: recarrega sozinho, mas NUNCA no meio de uma música tocando
   navigator.serviceWorker.addEventListener("controllerchange", () => { if (au.paused) recarregar(); else { esperando = true; aviso("Tem versão nova, entra quando você pausar"); } });
   au.addEventListener("pause", () => { if (esperando) recarregar(); });
-  const procurar = () => navigator.serviceWorker.getRegistration().then(r => r?.update().catch(() => {}));
-  procurar();
-  // toda vez que ela volta pro app (ícone da tela de início), procuro atualização
+  // vigia o app E o repertório: se eu publicar qualquer coisa, o app aberto percebe em até 1 min
+  const ARQUIVOS = ["index.html", "repertorio.js"]; const base = {};
+  const ler = a => fetch(a + "?t=" + Date.now(), { cache: "no-cache" }).then(r => r.ok ? r.text() : null).catch(() => null);
+  ARQUIVOS.forEach(async a => { base[a] = await ler(a); });
+  const procurar = async () => {
+    navigator.serviceWorker.getRegistration().then(r => r?.update().catch(() => {}));
+    for (const a of ARQUIVOS) { const t = await ler(a); if (t && base[a] && t !== base[a]) { base[a] = t; if (au.paused) recarregar(); else { esperando = true; aviso("Tem novidade, entra quando você pausar"); } return; } }
+  };
   document.addEventListener("visibilitychange", () => { if (!document.hidden) procurar(); });
-  setInterval(procurar, 10 * 60 * 1000);
+  setInterval(procurar, 60 * 1000);
 }
 // escape manual: joga fora a cópia guardada do app (as músicas ficam) e abre a versão nova
 async function atualizarNaMao() {
