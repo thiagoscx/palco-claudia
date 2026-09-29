@@ -16,7 +16,9 @@ const ESPETACULO = {
       { id: "3-2", v: 2, dur: 111, num: "3.2", titulo: "Nunca Desistir", artista: "Imagine e Sonhe", nota: "em 105%" } ] },
     { n: 4, tema: "Amizade",  cor: "#3DD598", faixas: [
       { id: "4-1", dur: 198, num: "4.1", titulo: "A Amizade", artista: "Mundo Bita" },
-      { id: "4-2", dur: 188, num: "4.2", titulo: "Meu, Seu, Nosso", artista: "Mundo Bita" } ] },
+      { id: "4-2", dur: 188, num: "4.2", titulo: "Meu, Seu, Nosso", artista: "Mundo Bita" },
+      { id: "4-3", dur: 122, num: "4.3", titulo: "Dancinha da Amizade", artista: "Aylla Kids", nota: "opção: original" },
+      { id: "4-3b", dur: 111, num: "4.3", titulo: "Dancinha da Amizade", artista: "Aylla Kids", nota: "opção: 110%, mais animada" } ] },
     { n: 5, tema: "Sonhos",   cor: "#A97BFF", faixas: [
       { id: "5-1", dur: 199, num: "5.1", titulo: "Palco de Brinquedos", artista: "Mundo Bita" },
       { id: "5-2", dur: 207, num: "5.2", titulo: "Oração ao Tempo", artista: "Caetano Veloso" },
