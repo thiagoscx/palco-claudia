@@ -18,7 +18,9 @@ const ESPETACULO = {
       { id: "4-1", dur: 198, num: "4.1", titulo: "A Amizade", artista: "Mundo Bita" },
       { id: "4-2", dur: 188, num: "4.2", titulo: "Meu, Seu, Nosso", artista: "Mundo Bita" },
       { id: "4-3", dur: 122, num: "4.3", titulo: "Dancinha da Amizade", artista: "Aylla Kids", nota: "opção: original" },
-      { id: "4-3b", dur: 111, num: "4.3", titulo: "Dancinha da Amizade", artista: "Aylla Kids", nota: "opção: 110%, mais animada" } ] },
+      { id: "4-3b", dur: 111, num: "4.3", titulo: "Dancinha da Amizade", artista: "Aylla Kids", nota: "opção: 110%, mais animada" },
+      { id: "4-sun", dur: 161, num: "4.4", titulo: "Sunflower", artista: "Post Malone & Swae Lee", nota: "cantada" },
+      { id: "4-amigo-fa", dur: 189, num: "4.5", titulo: "Amigo", artista: "Felipe Amorim (do Roberto Carlos)", nota: "opção: forró" } ] },
     { n: 5, tema: "Sonhos",   cor: "#A97BFF", faixas: [
       { id: "5-1", dur: 199, num: "5.1", titulo: "Palco de Brinquedos", artista: "Mundo Bita" },
       { id: "5-2", dur: 207, num: "5.2", titulo: "Oração ao Tempo", artista: "Caetano Veloso" },
