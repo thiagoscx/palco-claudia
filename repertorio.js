@@ -14,12 +14,9 @@ const ESPETACULO = {
       { id: "3-1b", dur: 158, num: "3.1", titulo: "Sunflower", artista: "instrumental", nota: "emenda na anterior" },
       { id: "3-2", v: 2, dur: 111, num: "3.2", titulo: "Nunca Desistir", artista: "Imagine e Sonhe", nota: "em 105%" } ] },
     { n: 4, tema: "Amizade",  cor: "#3DD598", faixas: [
-      { id: "4-1", dur: 198, num: "4.1", titulo: "A Amizade", artista: "Mundo Bita" },
-      { id: "4-2", dur: 188, num: "4.2", titulo: "Meu, Seu, Nosso", artista: "Mundo Bita" },
-      { id: "4-3b", dur: 111, num: "4.3", titulo: "Dancinha da Amizade", artista: "Aylla Kids", nota: "em 110%" },
-      { id: "4-sun", dur: 161, num: "4.4", titulo: "Sunflower", artista: "Post Malone & Swae Lee", nota: "cantada" },
-      { id: "4-amigo-fa", dur: 189, num: "4.5", titulo: "Amigo", artista: "Felipe Amorim (do Roberto Carlos)", nota: "opção: forró" },
-      { id: "4-amigo-rx", dur: 256, num: "4.5", titulo: "Amigo", artista: "Roberto Carlos, remix DJ Francis Marcki", nota: "opção: remix eletrônico" } ] },
+      { id: "4-3b", dur: 111, num: "4.1", titulo: "Dancinha da Amizade", artista: "Aylla Kids", nota: "em 110%" },
+      { id: "4-sun", dur: 161, num: "4.2", titulo: "Sunflower", artista: "Post Malone & Swae Lee", nota: "cantada" },
+      { id: "4-amigo-rx", dur: 256, num: "4.3", titulo: "Amigo", artista: "Roberto Carlos, remix DJ Francis Marcki", nota: "remix" } ] },
     { n: 5, tema: "Sonhos",   cor: "#A97BFF", faixas: [
       { id: "5-1", dur: 199, num: "5.1", titulo: "Palco de Brinquedos", artista: "Mundo Bita" },
       { id: "5-2", dur: 207, num: "5.2", titulo: "Oração ao Tempo", artista: "Caetano Veloso" },
