@@ -11,8 +11,8 @@ const ESPETACULO = {
       { id: "2-2c", v: 3, dur: 187, num: "2.2", titulo: "Oração", artista: "instrumental + remix JetLag", nota: "instrumental até 0:47, remix inteiro" } ] },
     { n: 3, tema: "Coragem",  cor: "#FF6B35", faixas: [
       { id: "3-1a", dur: 203, num: "3.1", titulo: "What's Up Danger", artista: "instrumental" },
-      { id: "3-1b", dur: 158, num: "3.1", titulo: "Sunflower", artista: "instrumental", nota: "emenda na anterior" },
-      { id: "3-2", v: 2, dur: 111, num: "3.2", titulo: "Nunca Desistir", artista: "Imagine e Sonhe", nota: "em 105%" } ] },
+      { id: "3-2", v: 2, dur: 111, num: "3.2", titulo: "Nunca Desistir", artista: "Imagine e Sonhe", nota: "em 105%" },
+      { id: "3-3", dur: 203, num: "3.3", titulo: "What's Up Danger", artista: "instrumental", nota: "de novo, fecha a Coragem" } ] },
     { n: 4, tema: "Amizade",  cor: "#3DD598", faixas: [
       { id: "4-amigo-rx", dur: 256, num: "4.1", titulo: "Amigo", artista: "Roberto Carlos, remix DJ Francis Marcki", nota: "remix" },
       { id: "4-3b", v: 2, dur: 106, num: "4.2", titulo: "Dancinha da Amizade", artista: "Aylla Kids", nota: "em 110%, termina em 1:46" },
