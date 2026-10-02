@@ -8,7 +8,8 @@ const ESPETACULO = {
       { id: "1-1", v: 2, dur: 180, num: "1.2", titulo: "Bagunça de Criança", artista: "Mundo Bita", nota: "sem a fala do começo" } ] },
     { n: 2, tema: "Amor",     cor: "#FF5D8F", faixas: [
       { id: "2-1c", v: 2, dur: 159, num: "2.1", titulo: "Como É Grande o Meu Amor por Você", artista: "Melim", nota: "em 105%" },
-      { id: "2-2c", v: 3, dur: 187, num: "2.2", titulo: "Oração", artista: "instrumental + remix JetLag", nota: "instrumental até 0:47, remix inteiro" } ] },
+      { id: "2-2c", v: 3, dur: 187, num: "2.2", titulo: "Oração", artista: "instrumental + remix JetLag", nota: "instrumental até 0:47, remix inteiro" },
+      { id: "2-3m", dur: 159, num: "2.3", titulo: "Como É Grande o Meu Amor por Você", artista: "Melim", nota: "em 105%, de novo, fecha o Amor" } ] },
     { n: 3, tema: "Coragem",  cor: "#FF6B35", faixas: [
       { id: "3-1a", dur: 203, num: "3.1", titulo: "What's Up Danger", artista: "instrumental" },
       { id: "3-2", v: 2, dur: 111, num: "3.2", titulo: "Nunca Desistir", artista: "Imagine e Sonhe", nota: "em 105%" },
