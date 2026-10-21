@@ -12,13 +12,10 @@ const ESPETACULO = {
       { id: "2-3m", dur: 159, num: "2.3", titulo: "Como É Grande o Meu Amor por Você", artista: "Melim", nota: "em 105%, de novo, fecha o Amor" } ] },
     { n: 3, tema: "Coragem",  cor: "#FF6B35", faixas: [
       { id: "3-1a", dur: 203, num: "3.1", titulo: "What's Up Danger", artista: "instrumental" },
-      { id: "3-2", v: 2, dur: 111, num: "3.2", titulo: "Nunca Desistir", artista: "Imagine e Sonhe", nota: "em 105%" },
-      { id: "3-3", dur: 203, num: "3.3", titulo: "What's Up Danger", artista: "instrumental", nota: "de novo, fecha a Coragem" } ] },
+      { id: "3-nunca-danger", dur: 312.567, num: "3.2", titulo: "Nunca Desistir + What's Up Danger", artista: "Imagine e Sonhe + instrumental", nota: "Nunca Desistir em 105%, emenda sem pausa" } ] },
     { n: 4, tema: "Amizade",  cor: "#3DD598", faixas: [
       { id: "4-amigo-rx", dur: 256, num: "4.1", titulo: "Amigo", artista: "Roberto Carlos, remix DJ Francis Marcki", nota: "remix" },
-      { id: "4-3b", v: 2, dur: 106, num: "4.2", titulo: "Dancinha da Amizade", artista: "Aylla Kids", nota: "em 110%, termina em 1:46" },
-      { id: "4-sun", dur: 161, num: "4.3", titulo: "Sunflower", artista: "Post Malone & Swae Lee", nota: "cantada" },
-      { id: "5-3", dur: 145, num: "4.4", titulo: "Fábrica de Saudades", artista: "Carrossel" } ] },
+      { id: "4-dancinha-sunflower", dur: 267.179, num: "4.2", titulo: "Dancinha da Amizade + Sunflower", artista: "Aylla Kids + Post Malone & Swae Lee", nota: "Dancinha em 110% até 1:46, emenda na Sunflower cantada" } ] },
     { n: 5, tema: "Sonhos",   cor: "#A97BFF", faixas: [
       { id: "5-2", dur: 207, num: "5.1", titulo: "Oração ao Tempo", artista: "Caetano Veloso" },
       { id: "5-5", dur: 162, num: "5.2", titulo: "Um Mundo Ideal", artista: "Melim (Aladdin)" } ] },
@@ -27,7 +24,8 @@ const ESPETACULO = {
       { id: "6-2", dur: 110, num: "6.2", titulo: "Flores de Gratidão", artista: "Universo da Música Infantil" },
       { id: "6-3", dur: 230, num: "6.3", titulo: "Sementes do Amanhã", artista: "Gonzaguinha" },
       { id: "6-4", dur: 166, num: "6.4", titulo: "Depende de Nós", artista: "Ivan Lins" },
-      { id: "6-5", dur: 251, num: "6.5", titulo: "É Preciso Saber Viver", artista: "Titãs" } ] },
+      { id: "6-5", dur: 251, num: "6.5", titulo: "É Preciso Saber Viver", artista: "Titãs" },
+      { id: "5-3", dur: 145, num: "6.6", titulo: "Fábrica de Saudades", artista: "Carrossel" } ] },
   ],
 };
 const TODAS = ESPETACULO.coreografias.flatMap(c => c.faixas.map(f => ({ ...f, coreo: c })));
