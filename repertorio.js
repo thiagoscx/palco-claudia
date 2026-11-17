@@ -18,8 +18,7 @@ const ESPETACULO = {
       { id: "4-dancinha-sunflower", dur: 267.179, num: "4.2", titulo: "Dancinha da Amizade + Sunflower", artista: "Aylla Kids + Post Malone & Swae Lee", nota: "Dancinha em 110% até 1:46, emenda na Sunflower cantada" } ] },
     { n: 5, tema: "Sonhos",   cor: "#A97BFF", faixas: [
       { id: "5-2", dur: 207, num: "5.1", titulo: "Oração ao Tempo", artista: "Caetano Veloso" },
-      { id: "5-5", dur: 162, num: "5.2", titulo: "Um Mundo Ideal", artista: "Melim (Aladdin)" },
-      { id: "5-6", dur: 264, num: "5.3", titulo: "Adventure of a Lifetime", artista: "Coldplay", nota: "música inteira, depois do Um Mundo Ideal" } ] },
+      { id: "5-mundo-adventure", dur: 428.304, num: "5.2", titulo: "Um Mundo Ideal + Adventure of a Lifetime", artista: "Melim (Aladdin) + Coldplay", nota: "pausa normal de 3 s entre as duas" } ] },
     { n: 6, tema: "Gratidão", cor: "#4EA8DE", faixas: [
       { id: "6-1", v: 2, dur: 264, corte: [0, 36.3], num: "6.1", titulo: "Adventure of a Lifetime", artista: "Coldplay", nota: "só o começo, como efeito" },
       { id: "6-2", dur: 110, num: "6.2", titulo: "Flores de Gratidão", artista: "Universo da Música Infantil" },
